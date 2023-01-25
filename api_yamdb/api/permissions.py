@@ -2,6 +2,7 @@ from rest_framework import permissions
 
 
 class IsAuthorPermission(permissions.BasePermission):
+    """Проверка пользователя на роль автора."""
     def has_object_permission(self, request, view, obj):
         return (
             request.method in permissions.SAFE_METHODS
@@ -10,6 +11,7 @@ class IsAuthorPermission(permissions.BasePermission):
 
 
 class IsAdminPermission(permissions.BasePermission):
+    """Проверка пользователя на роль Администратора."""
     def has_permission(self, request, view):
         user = request.user
         return (
@@ -26,6 +28,7 @@ class IsAdminPermission(permissions.BasePermission):
 
 
 class IsModeratorPermission(permissions.BasePermission):
+    """Проверка пользователя на роль Модератора."""
     def has_permission(self, request, view):
         user = request.user
         return (
