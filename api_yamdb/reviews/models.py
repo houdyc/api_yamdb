@@ -147,16 +147,16 @@ class Title(models.Model):
 class Review(models.Model):
     """Модель отзыва."""
     title = models.ForeignKey(
-        'Title',
+        Title,
         on_delete=models.CASCADE,
         verbose_name='Отзыв',
-        related_name='Review'
+        related_name='reviews'
     )
     author = models.ForeignKey(
-        'User',
+        User,
         on_delete=models.CASCADE,
         verbose_name='Автор',
-        related_name='Review'
+        related_name='reviews'
     )
     text = models.TextField(max_length=250)
     pub_date = models.DateField(
@@ -187,17 +187,17 @@ class Review(models.Model):
 class Comments(models.Model):
     """Модель комментария."""
     author = models.ForeignKey(
-        'User',
+        User,
         on_delete=models.CASCADE,
         verbose_name='Автор',
-        related_name='Comments'
+        related_name='comments'
     )
     text = models.TextField(max_length=250, verbose_name='Текст отзыва')
     review = models.ForeignKey(
-        'Review',
+        Review,
         on_delete=models.CASCADE,
         verbose_name='Отзыв',
-        related_name='Comments'
+        related_name='comments'
     )
     pub_date = models.DateField(
         auto_now_add=True,
