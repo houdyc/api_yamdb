@@ -6,12 +6,12 @@ from django.db import models
 class User(AbstractUser):
     """Модель пользователей."""
 
-    USER = 'User'
-    MODER = 'Moderator'
-    ADMIN = 'Administrator'
+    USER = 'user'
+    MODERATOR = 'moderator'
+    ADMIN = 'admini'
     ROLES = [
         (USER, 'Пользователь'),
-        (MODER, 'Модератор'),
+        (MODERATOR, 'Модератор'),
         (ADMIN, 'Администратор'),
     ]
 
