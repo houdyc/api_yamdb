@@ -8,7 +8,7 @@ class User(AbstractUser):
 
     USER = 'user'
     MODERATOR = 'moderator'
-    ADMIN = 'admini'
+    ADMIN = 'admin'
     ROLES = [
         (USER, 'Пользователь'),
         (MODERATOR, 'Модератор'),
@@ -39,7 +39,7 @@ class User(AbstractUser):
         verbose_name='Фамилия',
     )
 
-    biography = models.TextField(
+    bio = models.TextField(
         max_length=500,
         blank=True,
         verbose_name='Информация о себе',
