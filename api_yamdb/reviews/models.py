@@ -2,18 +2,19 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+USER = 'user'
+MODERATOR = 'moderator'
+ADMIN = 'admin'
+
+ROLES = [
+    (USER, 'Пользователь'),
+    (MODERATOR, 'Модератор'),
+    (ADMIN, 'Администратор'),
+]
+
 
 class User(AbstractUser):
     """Модель пользователей."""
-
-    USER = 'user'
-    MODERATOR = 'moderator'
-    ADMIN = 'admin'
-    ROLES = [
-        (USER, 'Пользователь'),
-        (MODERATOR, 'Модератор'),
-        (ADMIN, 'Администратор'),
-    ]
 
     username = models.CharField(
         max_length=150,
@@ -51,6 +52,18 @@ class User(AbstractUser):
         default=USER,
         verbose_name='Роль пользователя',
     )
+
+    @property
+    def is_user(self):
+        return self.role == USER
+
+    @property
+    def is_admin(self):
+        return self.role == ADMIN
+
+    @property
+    def is_moderator(self):
+        return self.role == MODERATOR
 
     class Meta:
         ordering = ('id',)
@@ -159,17 +172,18 @@ class Review(models.Model):
         related_name='reviews'
     )
     text = models.TextField(max_length=250)
-    pub_date = models.DateField(
+    pub_date = models.DateTimeField(
         auto_now_add=True,
         db_index=True,
         verbose_name='Дата публикации'
     )
-    rating = models.IntegerField(
+    score = models.IntegerField(
         validators=[
             MinValueValidator(1),
             MaxValueValidator(10)
         ],
-        verbose_name='Рейтинг'
+        null=True,
+        verbose_name='Оценка'
     )
 
     class Meta:
@@ -199,7 +213,7 @@ class Comments(models.Model):
         verbose_name='Отзыв',
         related_name='comments'
     )
-    pub_date = models.DateField(
+    pub_date = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Дата публикации',
         db_index=True
