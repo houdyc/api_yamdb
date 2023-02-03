@@ -2,21 +2,27 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from users.models import User
-from users.serializers import SendConfirmationCodeSerializer, TokenSerializer
+from users.serializers import (
+    MeSerializer,
+    SignupSerializer,
+    TokenSerializer,
+    UserSerializer,
+)
 
 
 class SignupView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        serializer = SendConfirmationCodeSerializer(data=request.data)
+        serializer = SignupSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
         username = serializer.validated_data['username']
@@ -71,3 +77,19 @@ class TokenView(APIView):
             {'Error': 'Неверный код подтверждения'},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class UsersViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    @action(
+        methods=['GET', 'PATCH'],
+        detail=False,
+        permission_classes=[
+            IsAuthenticated,
+        ],
+    )
+    def me(self, request):
+        serializer = MeSerializer(self.request.user)
+        return Response(serializer.data)

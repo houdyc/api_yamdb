@@ -3,8 +3,11 @@ from rest_framework import viewsets
 
 from reviews.models import Review, Title
 
-from .permissions import IsAdminPermission, IsAuthorPermission
-from .permissions import IsModeratorPermission
+from .permissions import (
+    IsAdminPermission,
+    IsAuthorPermission,
+    IsModeratorPermission,
+)
 from .serializers import CommentSerializer, ReviewSerializer
 
 
