@@ -14,3 +14,11 @@ class SendConfirmationCodeSerializer(serializers.ModelSerializer):
             'username',
         )
         model = User
+
+
+class TokenSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+
+    class Meta:
+        fields = '__all__'
+        model = User
