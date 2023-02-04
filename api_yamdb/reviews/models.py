@@ -15,7 +15,7 @@ class User(AbstractUser):
         (ADMIN, 'Администратор'),
     ]
 
-    username = models.CharField(
+    username = models.Charfield(
         max_length=150,
         unique=True,
         verbose_name='Имя пользователя',
@@ -69,7 +69,11 @@ class Category(models.Model):
         verbose_name='Категория',
     )
 
-    slug = models.SlugField(unique=True, verbose_name='URL категории')
+    slug = models.SlugField(
+        unique=True,
+        verbose_name='URL категории'
+    )
+
 
     class Meta:
         ordering = ('name',)
@@ -142,7 +146,6 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Review(models.Model):
     """Модель отзыва."""
