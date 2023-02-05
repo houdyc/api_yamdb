@@ -48,7 +48,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name',
-                  'last_name', 'biography', 'role')
+                  'last_name', 'bio', 'role')
 
 
 class NotAdminUserSerializer(serializers.ModelSerializer):
@@ -56,7 +56,7 @@ class NotAdminUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name',
-                  'last_name', 'biography', 'role')
+                  'last_name', 'bio', 'role')
         read_only_fields = ('role',)
 
 
