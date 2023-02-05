@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, mixins, status
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -7,8 +7,9 @@ from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
                                    ListModelMixin)
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import (CommentSerializer, ReviewSerializer, CategorySerializer,
-                          GenreSerializer, TitleReadSerializer, TitleWriteSerializer,
+from .serializers import (CommentSerializer, ReviewSerializer,
+                          CategorySerializer, GenreSerializer,
+                          TitleReadSerializer, TitleWriteSerializer,
                           AdminUserSerializer, NotAdminUserSerializer)
 from .permissions import (IsAuthorPermission, IsAdminPermission,
                           IsModeratorPermission, IsAdminOrReadOnlyPermission)
@@ -57,15 +58,15 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review_id=review.id)
 
 
-class CategoryViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class CategoryViewSet(ListModelMixin, CreateModelMixin,
+                      DestroyModelMixin, GenericViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAdminOrReadOnlyPermission]
 
 
-class GenreViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
-                   mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class GenreViewSet(ListModelMixin, CreateModelMixin,
+                   DestroyModelMixin, GenericViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [IsAdminOrReadOnlyPermission]

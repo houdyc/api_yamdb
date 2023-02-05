@@ -87,7 +87,6 @@ class Category(models.Model):
         verbose_name='URL категории'
     )
 
-
     class Meta:
         ordering = ('name',)
         verbose_name = 'Категория'
@@ -159,6 +158,7 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Review(models.Model):
     """Модель отзыва."""
