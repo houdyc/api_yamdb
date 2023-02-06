@@ -28,17 +28,19 @@ class TokenSerializer(serializers.Serializer):
         model = User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AdminUserSerializer(serializers.ModelSerializer):
+    """Сериализатор для пользователя с ролью администратор."""
+
     class Meta:
+        model = User
         fields = (
-            'bio',
+            'username',
             'email',
             'first_name',
             'last_name',
+            'bio',
             'role',
-            'username',
         )
-        model = User
 
     def validate_username(self, value):
         if value.lower() == 'me':
@@ -48,16 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
 
-class MeSerializer(serializers.ModelSerializer):
-    role = serializers.CharField(read_only=True)
+class UserSerializer(AdminUserSerializer):
+    """Сериализатор для пользователя - не администратора."""
 
-    class Meta:
-        model = User
-        fields = (
-            'bio',
-            'email',
-            'first_name',
-            'last_name',
-            'role',
-            'username',
-        )
+    role = serializers.CharField(read_only=True)

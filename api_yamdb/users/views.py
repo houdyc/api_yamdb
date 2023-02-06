@@ -11,11 +11,12 @@ from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from users.models import User
 from users.serializers import (
-    MeSerializer,
+    AdminUserSerializer,
     SignupSerializer,
     TokenSerializer,
     UserSerializer,
 )
+from users.permissions import IsAdminOrReadOnlyPermission, IsAdminPermission
 
 
 class SignupView(APIView):
@@ -79,17 +80,29 @@ class TokenView(APIView):
         )
 
 
-class UsersViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = 'username'
 
     @action(
         methods=['GET', 'PATCH'],
         detail=False,
-        permission_classes=[
-            IsAuthenticated,
-        ],
+        permission_classes=(IsAuthenticated,),
     )
     def me(self, request):
-        serializer = MeSerializer(self.request.user)
-        return Response(serializer.data)
+        if request.method == 'GET':
+            serializer = UserSerializer(self.request.user)
+            return Response(serializer.data)
+        if request.user.is_admin:
+            serializer = AdminUserSerializer(
+                request.user, data=request.data, partial=True
+            )
+        else:
+            serializer = UserSerializer(
+                request.user, data=request.data, partial=True
+            )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
