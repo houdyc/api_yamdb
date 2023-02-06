@@ -17,7 +17,6 @@ class Category(models.Model):
         verbose_name='URL категории'
     )
 
-
     class Meta:
         ordering = ('name',)
         verbose_name = 'Категория'
@@ -90,6 +89,7 @@ class Title(models.Model):
     def __str__(self):
         return self.name
 
+
 class Review(models.Model):
     """Модель отзыва."""
 
@@ -106,12 +106,18 @@ class Review(models.Model):
         related_name='reviews',
     )
     text = models.TextField(max_length=250)
-    pub_date = models.DateField(
-        auto_now_add=True, db_index=True, verbose_name='Дата публикации'
+    pub_date = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True,
+        verbose_name='Дата публикации'
     )
-    rating = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(10)],
-        verbose_name='Рейтинг',
+    score = models.IntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10)
+        ],
+        null=True,
+        verbose_name='Оценка'
     )
 
     class Meta:
@@ -139,8 +145,10 @@ class Comments(models.Model):
         verbose_name='Отзыв',
         related_name='comments',
     )
-    pub_date = models.DateField(
-        auto_now_add=True, verbose_name='Дата публикации', db_index=True
+    pub_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата публикации',
+        db_index=True
     )
 
     class Meta:
