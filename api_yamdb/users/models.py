@@ -8,12 +8,12 @@ class User(AbstractUser):
     """Модель пользователей."""
 
     USER = 'user'
-    MODER = 'moderator'
-    ADMIN = 'administrator'
+    MODERATOR = 'moderator'
+    ADMIN = 'admin'
     ROLES = [
-        (USER, 'Пользователь'),
-        (MODER, 'Модератор'),
-        (ADMIN, 'Администратор'),
+        (USER, 'user'),
+        (MODERATOR, 'moderator'),
+        (ADMIN, 'admin'),
     ]
 
     username = models.CharField(

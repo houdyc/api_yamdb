@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets, filters
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from users.models import User
+from users.permissions import IsAdminPermission
 from users.serializers import (
     AdminUserSerializer,
     SignupSerializer,
@@ -101,6 +102,11 @@ class UserViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
+
+    def get_permissions(self):
+        if self.action in ('list', 'retrieve'):
+            return (IsAdminPermission(),)
+        return super().get_permissions()
 
     @action(
         methods=['GET', 'PATCH'],
