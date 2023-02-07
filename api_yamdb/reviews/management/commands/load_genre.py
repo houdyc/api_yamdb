@@ -21,4 +21,7 @@ class Command(BaseCommand):
                 slug=genre.get('slug'),
             )
             genre_to_save.save()
+<<<<<<< HEAD
             
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d

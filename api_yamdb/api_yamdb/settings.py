@@ -1,5 +1,8 @@
 import os
+<<<<<<< HEAD
 from datetime import timedelta
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -113,6 +116,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 
+<<<<<<< HEAD
 AUTH_USER_MODEL = 'users.User'
 
 EMAIL_BACKEND = os.environ['EMAIL_BACKEND']
@@ -120,3 +124,13 @@ EMAIL_BACKEND = os.environ['EMAIL_BACKEND']
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 EMAIL_FROM = "yamdb@example.com"
+=======
+AUTH_USER_MODEL = 'reviews.User'
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d

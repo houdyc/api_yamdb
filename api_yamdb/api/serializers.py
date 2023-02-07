@@ -53,7 +53,10 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
 class NotAdminUserSerializer(serializers.ModelSerializer):
     """Сериализатор для пользователя - не администратора."""
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name',
@@ -63,7 +66,10 @@ class NotAdminUserSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     """Сериализатор для модели категорий."""
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
     class Meta:
         model = Category
         fields = ('name', 'slug',)
@@ -71,7 +77,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class GenreSerializer(serializers.ModelSerializer):
     """Сериализатор для модели жанров."""
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
     class Meta:
         model = Genre
         fields = ('name', 'slug',)
@@ -79,7 +88,10 @@ class GenreSerializer(serializers.ModelSerializer):
 
 class TitleReadSerializer(serializers.ModelSerializer):
     """Сериализатор для чтения произведения."""
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
     category = CategorySerializer(read_only=True)
     genre = GenreSerializer(read_only=True, many=True)
     rating = serializers.IntegerField(read_only=True)
@@ -91,7 +103,10 @@ class TitleReadSerializer(serializers.ModelSerializer):
 
 class TitleWriteSerializer(serializers.ModelSerializer):
     """Сериализатор для записи произведения."""
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
     category = serializers.SlugRelatedField(
         queryset=Category.objects.all(),
         slug_field='slug',

@@ -23,4 +23,7 @@ class Command(BaseCommand):
                 category_id=title.get('category'),
             )
             title.save()
+<<<<<<< HEAD
             
+=======
+>>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
