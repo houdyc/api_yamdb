@@ -102,9 +102,10 @@ class UserViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username',)
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_permissions(self):
-        if self.action in ('list', 'retrieve'):
+        if self.action in ('list', 'retrieve', 'partial_update', 'destroy'):
             return (IsAdminPermission(),)
         return super().get_permissions()
 
