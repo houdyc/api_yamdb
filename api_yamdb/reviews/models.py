@@ -1,80 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-<<<<<<< HEAD
 from users.models import User
-=======
-USER = 'user'
-MODERATOR = 'moderator'
-ADMIN = 'admin'
-
-ROLES = [
-    (USER, 'Пользователь'),
-    (MODERATOR, 'Модератор'),
-    (ADMIN, 'Администратор'),
-]
-
-
-class User(AbstractUser):
-    """Модель пользователей."""
-
-    username = models.CharField(
-        max_length=150,
-        unique=True,
-        verbose_name='Имя пользователя',
-    )
-
-    email = models.EmailField(
-        max_length=254,
-        unique=True,
-        verbose_name='Электронная почта',
-    )
-
-    first_name = models.CharField(
-        max_length=150,
-        blank=True,
-        verbose_name='Имя',
-    )
-
-    last_name = models.CharField(
-        max_length=150,
-        blank=True,
-        verbose_name='Фамилия',
-    )
-
-    bio = models.TextField(
-        max_length=500,
-        blank=True,
-        verbose_name='Информация о себе',
-    )
-
-    role = models.CharField(
-        max_length=15,
-        choices=ROLES,
-        default=USER,
-        verbose_name='Роль пользователя',
-    )
-
-    @property
-    def is_user(self):
-        return self.role == USER
-
-    @property
-    def is_admin(self):
-        return self.role == ADMIN
-
-    @property
-    def is_moderator(self):
-        return self.role == MODERATOR
-
-    class Meta:
-        ordering = ('id',)
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
-
-    def __str__(self):
-        return self.username
->>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
 
 
 class Category(models.Model):
@@ -89,7 +16,6 @@ class Category(models.Model):
         unique=True,
         verbose_name='URL категории'
     )
-
 
     class Meta:
         ordering = ('name',)
@@ -180,27 +106,12 @@ class Review(models.Model):
         related_name='reviews',
     )
     text = models.TextField(max_length=250)
-<<<<<<< HEAD
     pub_date = models.DateField(
         auto_now_add=True, db_index=True, verbose_name='Дата публикации'
     )
     score = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(10)],
         verbose_name='Рейтинг',
-=======
-    pub_date = models.DateTimeField(
-        auto_now_add=True,
-        db_index=True,
-        verbose_name='Дата публикации'
-    )
-    score = models.IntegerField(
-        validators=[
-            MinValueValidator(1),
-            MaxValueValidator(10)
-        ],
-        null=True,
-        verbose_name='Оценка'
->>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
     )
 
     class Meta:
@@ -228,15 +139,8 @@ class Comments(models.Model):
         verbose_name='Отзыв',
         related_name='comments',
     )
-<<<<<<< HEAD
     pub_date = models.DateField(
         auto_now_add=True, verbose_name='Дата публикации', db_index=True
-=======
-    pub_date = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='Дата публикации',
-        db_index=True
->>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
     )
 
     class Meta:
