@@ -34,25 +34,11 @@ class IsModeratorPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         user = request.user
-<<<<<<< HEAD:api_yamdb/users/permissions.py
         return user.is_authenticated and user.is_moderator or user.is_staff
 
     def has_object_permission(self, request, view, obj):
         user = request.user
         return user.is_authenticated and user.is_moderator or user.is_staff
-=======
-        return (
-            user.is_authenticated and user.is_moderator
-            or user.is_staff
-        )
-
-    def has_object_permission(self, request, view, obj):
-        user = request.user
-        return (
-            user.is_authenticated and user.is_moderator
-            or user.is_staff
-        )
->>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d:api_yamdb/api/permissions.py
 
 
 class IsAdminOrReadOnlyPermission(permissions.BasePermission):
