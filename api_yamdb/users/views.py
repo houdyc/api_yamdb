@@ -108,6 +108,11 @@ class UserViewSet(viewsets.ModelViewSet):
             return (IsAdminPermission(),)
         return super().get_permissions()
 
+    def get_serializer_class(self):
+        if self.request.user.is_admin:
+            return AdminUserSerializer
+        return UserSerializer
+
     @action(
         methods=['GET', 'PATCH'],
         detail=False,
