@@ -1,5 +1,4 @@
 from django.contrib.auth.validators import ASCIIUsernameValidator
-from django.core.validators import EmailValidator
 from rest_framework import serializers
 
 from users.models import User

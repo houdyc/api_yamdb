@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from users.models import User
-from users.permissions import IsAdminOrReadOnlyPermission, IsAdminPermission
 from users.serializers import (
     AdminUserSerializer,
     SignupSerializer,
