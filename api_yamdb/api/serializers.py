@@ -1,16 +1,17 @@
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
-from reviews.models import Review, Comments
+from reviews.models import Review, Comments, User, Category, Genre, Title
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     """Сериализатор для модели Оценки."""
+
     author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
         model = Review
-        fields = ('title', 'author', 'text', 'pub_date', 'rating')
+        fields = ('id', 'author', 'text', 'pub_date', 'score')
 
     def validate(self, data):
         if self.context['request'].method != 'POST':
@@ -34,8 +35,73 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     """Сериализатор для модели комментария."""
+
     author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
         model = Comments
         fields = ('id', 'text', 'author', 'pub_date')
+
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    """Сериализатор для пользователя с ролью администратор."""
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name',
+                  'last_name', 'bio', 'role')
+
+
+class NotAdminUserSerializer(serializers.ModelSerializer):
+    """Сериализатор для пользователя - не администратора."""
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name',
+                  'last_name', 'bio', 'role')
+        read_only_fields = ('role',)
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    """Сериализатор для модели категорий."""
+
+    class Meta:
+        model = Category
+        fields = ('name', 'slug',)
+
+
+class GenreSerializer(serializers.ModelSerializer):
+    """Сериализатор для модели жанров."""
+
+    class Meta:
+        model = Genre
+        fields = ('name', 'slug',)
+
+
+class TitleReadSerializer(serializers.ModelSerializer):
+    """Сериализатор для чтения произведения."""
+
+    category = CategorySerializer(read_only=True)
+    genre = GenreSerializer(read_only=True, many=True)
+    rating = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Title
+        fields = '__all__'
+
+
+class TitleWriteSerializer(serializers.ModelSerializer):
+    """Сериализатор для записи произведения."""
+
+    category = serializers.SlugRelatedField(
+        queryset=Category.objects.all(),
+        slug_field='slug',
+    )
+    genre = serializers.SlugRelatedField(
+        queryset=Genre.objects.all(),
+        slug_field='slug',
+        many=True,
+    )
+
+    class Meta:
+        model = Title
+        fields = '__all__'
