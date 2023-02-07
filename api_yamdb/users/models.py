@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.validators import ASCIIUsernameValidator
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.validators import EmailValidator
 from django.db import models
 
@@ -21,7 +21,7 @@ class User(AbstractUser):
         unique=True,
         verbose_name='Имя пользователя',
         validators=[
-            ASCIIUsernameValidator(message="Некорректное имя пользователя")
+            UnicodeUsernameValidator(message="Некорректное имя пользователя")
         ],
     )
 

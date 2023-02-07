@@ -1,23 +1,32 @@
-from django.core.exceptions import ValidationError
+from django.contrib.auth.validators import ASCIIUsernameValidator
+from django.core.validators import EmailValidator
 from rest_framework import serializers
 
 from users.models import User
 
 
-class SignupSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = (
-            'email',
-            'username',
+def MeValidator(value):
+    if value.lower() == 'me':
+        raise serializers.ValidationError(
+            "Использовать имя 'me' в качестве `username` запрещено."
         )
-        model = User
+    return value
 
-    def validate_username(self, value):
-        if value.lower() == 'me':
-            raise ValidationError(
-                "Использовать имя 'me' в качестве `username` запрещено."
-            )
-        return value
+
+class SignupSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        min_length=1,
+        max_length=150,
+        required=True,
+        allow_blank=False,
+        validators=[MeValidator, ASCIIUsernameValidator()],
+    )
+    email = serializers.EmailField(
+        min_length=5,
+        max_length=254,
+        required=True,
+        allow_blank=False,
+    )
 
 
 class TokenSerializer(serializers.Serializer):
@@ -43,11 +52,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
         )
 
     def validate_username(self, value):
-        if value.lower() == 'me':
-            raise ValidationError(
-                "Использовать имя 'me' в качестве `username` запрещено."
-            )
-        return value
+        return MeValidator(value)
 
 
 class UserSerializer(AdminUserSerializer):

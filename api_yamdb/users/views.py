@@ -10,13 +10,13 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from users.models import User
+from users.permissions import IsAdminOrReadOnlyPermission, IsAdminPermission
 from users.serializers import (
     AdminUserSerializer,
     SignupSerializer,
     TokenSerializer,
     UserSerializer,
 )
-from users.permissions import IsAdminOrReadOnlyPermission, IsAdminPermission
 
 
 class SignupView(APIView):
@@ -27,9 +27,24 @@ class SignupView(APIView):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
         username = serializer.validated_data['username']
+
+        user = User.objects.filter(username=username)
+        if user.exists() and email != user.get().email:
+            return Response(
+                {"email": ["Wrong email address for this user."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        same_email = User.objects.filter(email=email)
+        if same_email.exists() and username != same_email.get().username:
+            return Response(
+                {"email": ["Email address already in occupied."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         user, created = User.objects.get_or_create(
-            email=email,
             username=username,
+            email=email,
         )
         if not created:
             user.email = email
