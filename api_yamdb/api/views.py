@@ -1,10 +1,13 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.mixins import (
     CreateModelMixin,
     DestroyModelMixin,
     ListModelMixin,
 )
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from api.serializers import (
@@ -34,13 +37,16 @@ class ReviewViewSet(viewsets.ModelViewSet):
         IsModeratorPermission,
     ]
 
+    def get_title(self):
+        return get_object_or_404(Title, id=self.kwargs.get('title_id'))
+
     def get_queryset(self):
-        title = get_object_or_404(Title, pk=self.kwargs.get('review_id'))
+        title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
         return title.reviews.all()
 
     def perform_create(self, serializer):
-        review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
-        serializer.save(author=self.request.user, review_id=review.id)
+        title = get_object_or_404(Review, pk=self.kwargs.get('title_id'))
+        serializer.save(author=self.request.user, title=title)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -52,13 +58,20 @@ class CommentViewSet(viewsets.ModelViewSet):
         IsAdminPermission,
         IsModeratorPermission,
     ]
+    pagination_class = PageNumberPagination
+
+    def get_review(self):
+        return get_object_or_404(
+            Review,
+            id=self.kwargs.get('review_id'),
+        )
 
     def get_queryset(self):
-        review = get_object_or_404(Review, pk=self.kwargs.get('title_id'))
+        review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
         return review.comments.all()
 
     def perform_create(self, serializer):
-        review = get_object_or_404(Review, pk=self.kwargs.get('review_id'))
+        review = get_object_or_404(Review, id=self.kwargs.get('review_id'))
         serializer.save(author=self.request.user, review_id=review.id)
 
 
@@ -69,6 +82,19 @@ class CategoryViewSet(
     serializer_class = CategorySerializer
     permission_classes = [IsAdminOrReadOnlyPermission]
 
+    @action(
+        detail=False,
+        methods=['delete'],
+        url_path=r'(?P<slug>\w+)',
+        lookup_field='slug',
+        url_name='category_slug',
+    )
+    def get_category(self, request, slug):
+        category = self.get_object()
+        serializer = CategorySerializer(category)
+        category.delete()
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
 
 class GenreViewSet(
     ListModelMixin, CreateModelMixin, DestroyModelMixin, GenericViewSet
@@ -76,6 +102,8 @@ class GenreViewSet(
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [IsAdminOrReadOnlyPermission]
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
