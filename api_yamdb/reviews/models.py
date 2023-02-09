@@ -147,3 +147,12 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class TitleGenre(models.Model):
+    title = models.ForeignKey(
+        Title, on_delete=models.CASCADE, related_name='TitleGenre_title'
+    )
+    genre = models.ForeignKey(
+        Genre, on_delete=models.CASCADE, related_name='TitleGenre_genre'
+    )
