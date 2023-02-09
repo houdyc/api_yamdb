@@ -150,14 +150,9 @@ class Comments(models.Model):
 
 
 class TitleGenre(models.Model):
-
     title = models.ForeignKey(
-        Title,
-        on_delete=models.CASCADE,
-        related_name='TitleGenre_title'
+        Title, on_delete=models.CASCADE, related_name='TitleGenre_title'
     )
     genre = models.ForeignKey(
-        Genre,
-        on_delete=models.CASCADE,
-        related_name='TitleGenre_genre'
+        Genre, on_delete=models.CASCADE, related_name='TitleGenre_genre'
     )

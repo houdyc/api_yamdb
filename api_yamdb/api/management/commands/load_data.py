@@ -2,8 +2,8 @@ import csv
 
 from django.core.management.base import BaseCommand
 
+from reviews.models import Category, Comments, Genre, Review, Title, TitleGenre
 from users.models import User
-from reviews.models import Genre, Title, Comments, Category, Review, TitleGenre
 
 
 class Command(BaseCommand):
@@ -103,7 +103,7 @@ class Command(BaseCommand):
 
         print('Импортируется genre_title.csv')
         with open(
-                'static/data/genre_title.csv', 'r', encoding='utf-8'
+            'static/data/genre_title.csv', 'r', encoding='utf-8'
         ) as file:
             title_genres = list(csv.DictReader(file, delimiter=','))
 
