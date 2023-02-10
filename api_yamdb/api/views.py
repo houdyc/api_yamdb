@@ -121,3 +121,4 @@ class TitleViewSet(viewsets.ModelViewSet):
         if self.action == 'list' or self.action == 'retrieve':
             return TitleReadSerializer
         return TitleWriteSerializer
+    
