@@ -12,10 +12,7 @@ class Category(models.Model):
         verbose_name='Категория',
     )
 
-    slug = models.SlugField(
-        unique=True,
-        verbose_name='URL категории'
-    )
+    slug = models.SlugField(unique=True, verbose_name='URL категории')
 
     class Meta:
         ordering = ('name',)
@@ -106,12 +103,13 @@ class Review(models.Model):
         related_name='reviews',
     )
     text = models.TextField(max_length=250)
-    pub_date = models.DateField(
+    pub_date = models.DateTimeField(
         auto_now_add=True, db_index=True, verbose_name='Дата публикации'
     )
     score = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(10)],
-        verbose_name='Рейтинг',
+        null=True,
+        verbose_name='Оценка',
     )
 
     class Meta:
@@ -139,7 +137,7 @@ class Comments(models.Model):
         verbose_name='Отзыв',
         related_name='comments',
     )
-    pub_date = models.DateField(
+    pub_date = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата публикации', db_index=True
     )
 
@@ -149,3 +147,12 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class TitleGenre(models.Model):
+    title = models.ForeignKey(
+        Title, on_delete=models.CASCADE, related_name='TitleGenre_title'
+    )
+    genre = models.ForeignKey(
+        Genre, on_delete=models.CASCADE, related_name='TitleGenre_genre'
+    )

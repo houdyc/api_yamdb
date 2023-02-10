@@ -24,7 +24,3 @@ class Command(BaseCommand):
                 pub_date=review.get('pub_date'),
             )
             review_to_save.save()
-<<<<<<< HEAD
-            
-=======
->>>>>>> 3543b90acf979d28dd806b8beaee95eefd99211d
