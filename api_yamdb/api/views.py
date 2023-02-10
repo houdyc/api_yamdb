@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.mixins import (
@@ -9,9 +10,8 @@ from rest_framework.mixins import (
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django_filters.rest_framework import DjangoFilterBackend
 
+from api.filters import FilterTitle
 from api.serializers import (
     CategorySerializer,
     CommentSerializer,
@@ -26,8 +26,8 @@ from users.permissions import (
     IsAdminPermission,
     IsAuthorPermission,
     IsModeratorPermission,
+    IsValidOrReadonly,
 )
-from api.filters import FilterTitle
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -35,9 +35,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     serializer_class = ReviewSerializer
     permission_classes = [
-        IsAuthorPermission,
-        IsAdminPermission,
-        IsModeratorPermission,
+        IsValidOrReadonly
+        # IsAuthorPermission,
+        # IsAdminPermission,
+        # IsModeratorPermission,
     ]
 
     def get_title(self):
@@ -115,7 +116,10 @@ class GenreViewSet(
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     permission_classes = [IsAdminOrReadOnlyPermission]
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (
+        DjangoFilterBackend,
+        filters.SearchFilter,
+    )
     filterset_class = FilterTitle
 
     def get_serializer_class(self):
