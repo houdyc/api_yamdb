@@ -24,9 +24,6 @@ from api.serializers import (
 from reviews.models import Category, Genre, Review, Title
 from users.permissions import (
     IsAdminOrReadOnlyPermission,
-    IsAdminPermission,
-    IsAuthorPermission,
-    IsModeratorPermission,
     IsValidOrReadonly,
 )
 
