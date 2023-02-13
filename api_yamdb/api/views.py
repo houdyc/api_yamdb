@@ -36,9 +36,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
         IsValidOrReadonly,
     ]
 
-    def get_title(self):
-        return get_object_or_404(Title, id=self.kwargs.get('title_id'))
-
     def get_queryset(self):
         title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
         return title.reviews.all()
