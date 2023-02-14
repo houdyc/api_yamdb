@@ -1,15 +1,13 @@
 from django.shortcuts import get_object_or_404
 from django.db.models import Avg
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, status, viewsets
-from rest_framework.decorators import action
+from rest_framework import filters, viewsets
 from rest_framework.mixins import (
     CreateModelMixin,
     DestroyModelMixin,
     ListModelMixin,
 )
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from api.filters import FilterTitle
