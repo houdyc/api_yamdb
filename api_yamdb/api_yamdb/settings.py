@@ -1,16 +1,11 @@
-import os
 from datetime import timedelta
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv()
+SECRET_KEY = "p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs"
 
-SECRET_KEY = os.environ['SECRET_KEY']
-
-DEBUG = os.environ.get('DEBUG', False) == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -115,8 +110,8 @@ STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 
 AUTH_USER_MODEL = 'users.User'
 
-EMAIL_BACKEND = os.environ['EMAIL_BACKEND']
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+EMAIL_FILE_PATH = 'sent_emails'
 
 EMAIL_FROM = "yamdb@example.com"
