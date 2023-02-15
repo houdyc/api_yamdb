@@ -2,7 +2,7 @@ import csv
 
 from django.core.management import BaseCommand
 
-from reviews.models import Category, Comments, Genre, Review, Title, TitleGenre
+from reviews.models import Category, Comments, Genre, Review, Title
 from users.models import User
 
 TABLES = {
@@ -12,7 +12,6 @@ TABLES = {
     Title: 'titles.csv',
     Review: 'review.csv',
     Comments: 'comments.csv',
-    TitleGenre: 'genre_title.csv',
 }
 
 
@@ -28,4 +27,16 @@ class Command(BaseCommand):
                 reader = csv.DictReader(csv_file)
                 model.objects.bulk_create(
                     model(**data) for data in reader)
+
+        """создаем M2M связь."""
+        with open(
+                'static/data/genre_title.csv', 'r', encoding='utf-8'
+        ) as file:
+            title_genres = list(csv.DictReader(file, delimiter=','))
+
+        for title_genre in title_genres:
+            genre_id = title_genre['genre_id']
+            title_id = Title(title_genre['title_id'])
+            title_id.genre.add(genre_id)
+
         self.stdout.write(self.style.SUCCESS('Загрузка данных завершена'))
