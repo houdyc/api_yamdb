@@ -32,7 +32,7 @@ class Command(BaseCommand):
         with open(
                 'static/data/genre_title.csv', 'r', encoding='utf-8'
         ) as file:
-            title_genres = list(csv.DictReader(file, delimiter=','))
+            title_genres = csv.DictReader(file, delimiter=',')
 
         for title_genre in title_genres:
             genre_id = title_genre['genre_id']
