@@ -52,10 +52,6 @@ python manage.py runserver
 ## Документация
 Документация будет доступна по эндпоинту /redoc/.
 
-## Авторы
-- :white_check_mark: [Loren166 (TeamLead)](https://github.com/loren166)
-- :white_check_mark: [lexanikolaich (Python-разработчик)](https://github.com/lexanikolaich)
-- :white_check_mark: [Artem Ivanov (Python-разработчик)](https://github.com/rtmvnv)
 
 
 
